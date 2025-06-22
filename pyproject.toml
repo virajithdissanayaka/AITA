@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "aita-backend"
+version = "0.1.0"
+description = "AITA Backend API"
+authors = ["Your Name <your.email@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.104.1"
+uvicorn = {extras = ["standard"], version = "^0.24.0"}
+python-dotenv = "^1.0.0"
+groq = "^0.4.1"
+pydantic = "^2.5.0"
+python-multipart = "^0.0.6"
+httpx = "^0.25.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

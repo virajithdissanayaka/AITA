@@ -23,31 +23,16 @@ app = FastAPI(
 )
 
 # Configure CORS
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=[
-#         "http://localhost:3000",
-#         "http://localhost:5173",
-#         "https://*.vercel.app",
-#         "https://your-frontend-domain.vercel.app"  # Replace with actual domain
-#     ],
-#     allow_credentials=True,
-#     allow_methods=["GET", "POST"],
-#     allow_headers=["*"],
-# )
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
         "http://localhost:5173",
         "https://*.vercel.app",
-        "https://*.replit.app",
-        "https://*.repl.co",
-        "https://*.replit.dev",
-        "*"  # Allow all origins for development - restrict in production
+        "https://your-frontend-domain.vercel.app"  # Replace with actual domain
     ],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 
@@ -64,7 +49,7 @@ except Exception as e:
 class KeepAliveService:
     def __init__(self):
         self.base_url = os.getenv("BACKEND_URL", "http://localhost:8000")
-        self.ping_interval = int(os.getenv("PING_INTERVAL", "3"))  # 5 minutes default
+        self.ping_interval = int(os.getenv("PING_INTERVAL", "300"))  # 5 minutes default
         self.enabled = os.getenv("KEEP_ALIVE_ENABLED", "false").lower() == "true"
         self.running = False
         
@@ -236,4 +221,3 @@ if __name__ == "__main__":
         reload=False,
         log_level="info"
     )
-    
