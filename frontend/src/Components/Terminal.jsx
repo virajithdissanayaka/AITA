@@ -13,6 +13,12 @@ const EnhancedTerminal = () => {
   const [copiedIndex, setCopiedIndex] = useState(null);
   const [sessionStats, setSessionStats] = useState({ commands: 0, uptime: Date.now() });
   const [isSelecting, setIsSelecting] = useState(false);
+  const [systemInfo, setSystemInfo] = useState({
+    browser: '',
+    browserVersion: '',
+    os: '',
+    platform: ''
+  });
   
   const terminalRef = useRef(null);
   const inputRef = useRef(null);
@@ -140,10 +146,10 @@ const EnhancedTerminal = () => {
       { type: 'output', content: '  Response time: 🚀 ~800ms average' },
       { type: 'ai-response', content: '' },
       { type: 'success', content: '🌐 Network & Environment:' },
-      { type: 'output', content: `  Browser: 🌍 ${navigator.userAgent.split(' ')[0]}` },
-      { type: 'output', content: `  Platform: 💻 ${navigator.platform}` },
-      { type: 'output', content: `  Memory usage: 📊 Optimized` },
-      { type: 'output', content: `  Session ID: 🔑 ${Math.random().toString(36).substring(2, 8).toUpperCase()}` },
+      { type: 'output', content: `  Browser: 🌍 ${systemInfo.browser} ${systemInfo.browserVersion}` },
+      { type: 'output', content: `  Platform: 💻 ${systemInfo.platform}` },
+      { type: 'output', content: `  Operating System: 🖥️ ${systemInfo.os}` },
+      { type: 'output', content: `  Architecture: ⚙️ ${navigator.userAgent.includes('x64') || navigator.userAgent.includes('WOW64') ? '64-bit' : '32-bit'}` },
       { type: 'ai-response', content: '' },
       { type: 'output', content: '' },
       { type: 'info', content: `Current time: ${new Date().toLocaleString()}` }
@@ -392,6 +398,81 @@ const EnhancedTerminal = () => {
       setHistoryIndex(-1);
     }
   };
+
+
+  const detectSystemInfo = () => {
+    const ua = navigator.userAgent;
+    let browser = 'Unknown';
+    let browserVersion = 'Unknown';
+    let os = 'Unknown';
+    let platform = navigator.platform;
+
+    // Browser detection
+    if (ua.includes('Chrome') && !ua.includes('Edg') && !ua.includes('OPR')) {
+      browser = 'Chrome';
+      const match = ua.match(/Chrome\/([0-9.]+)/);
+      browserVersion = match ? match[1] : 'Unknown';
+    } else if (ua.includes('Firefox')) {
+      browser = 'Firefox';
+      const match = ua.match(/Firefox\/([0-9.]+)/);
+      browserVersion = match ? match[1] : 'Unknown';
+    } else if (ua.includes('Safari') && !ua.includes('Chrome')) {
+      browser = 'Safari';
+      const match = ua.match(/Version\/([0-9.]+)/);
+      browserVersion = match ? match[1] : 'Unknown';
+    } else if (ua.includes('Edg')) {
+      browser = 'Edge';
+      const match = ua.match(/Edg\/([0-9.]+)/);
+      browserVersion = match ? match[1] : 'Unknown';
+    } else if (ua.includes('OPR')) {
+      browser = 'Opera';
+      const match = ua.match(/OPR\/([0-9.]+)/);
+      browserVersion = match ? match[1] : 'Unknown';
+    }
+
+    // OS detection with enhanced platform info
+    if (platform.includes('Win')) {
+      if (ua.includes('WOW64') || ua.includes('Win64')) {
+        os = 'Windows (64-bit)';
+        platform = 'Win64';
+      } else {
+        os = 'Windows (32-bit)';
+        platform = 'Win32';
+      }
+      if (ua.includes('Windows NT 10.0')) os += ' 10/11';
+      else if (ua.includes('Windows NT 6.3')) os += ' 8.1';
+      else if (ua.includes('Windows NT 6.2')) os += ' 8';
+      else if (ua.includes('Windows NT 6.1')) os += ' 7';
+    } else if (platform.includes('Mac')) {
+      os = 'macOS';
+      if (ua.includes('Intel')) {
+        platform = 'MacIntel';
+      } else if (ua.includes('ARM')) {
+        platform = 'MacARM';
+      }
+    } else if (platform.includes('Linux')) {
+      os = 'Linux';
+      if (ua.includes('x86_64')) {
+        platform = 'Linux64';
+      } else if (ua.includes('i686')) {
+        platform = 'Linux32';
+      }
+    } else if (ua.includes('Android')) {
+      os = 'Android';
+      platform = 'Android';
+    } else if (ua.includes('iPhone') || ua.includes('iPad')) {
+      os = ua.includes('iPhone') ? 'iOS (iPhone)' : 'iOS (iPad)';
+      platform = ua.includes('iPhone') ? 'iPhone' : 'iPad';
+    }
+
+    return { browser, browserVersion, os, platform };
+  };
+
+  // Detect system info on mount
+  useEffect(() => {
+    const info = detectSystemInfo();
+    setSystemInfo(info);
+  }, []);
 
   // Enhanced cursor blinking effect - only when not selecting text
   useEffect(() => {

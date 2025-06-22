@@ -64,7 +64,7 @@ except Exception as e:
 class KeepAliveService:
     def __init__(self):
         self.base_url = os.getenv("BACKEND_URL", "http://localhost:8000")
-        self.ping_interval = int(os.getenv("PING_INTERVAL", "3"))  # 5 minutes default
+        self.ping_interval = int(os.getenv("PING_INTERVAL", "300"))  # 5 minutes default
         self.enabled = os.getenv("KEEP_ALIVE_ENABLED", "false").lower() == "true"
         self.running = False
         
