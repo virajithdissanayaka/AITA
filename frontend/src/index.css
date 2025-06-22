@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Fira Code', monospace;
+  background-color: #0a0a0a;
+  color: #00ff00;
+  overflow: hidden;
+}
+
+.xterm {
+  font-family: 'Fira Code', monospace !important;
+  font-size: 14px !important;
+}
+
+.xterm-viewport {
+  overflow-y: auto !important;
+}
+
+.xterm-screen {
+  background-color: #0a0a0a !important;
+}
+
+.terminal-container {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.typing-indicator {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.terminal-header {
+  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+  border-bottom: 2px solid #4ade80;
+}
+
+.terminal-button {
+  transition: all 0.2s ease;
+}
+
+.terminal-button:hover {
+  transform: scale(1.05);
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #4ade80;
+  border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #22c55e;
+}
